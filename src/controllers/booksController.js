@@ -1,7 +1,7 @@
 
 require('dotenv').config();
 
-const { Book }  = require("../models/Book.js");
+const Book = require("../models/Book.js");
 
 exports.getAllBooks = (req, res) => {
     Book
@@ -46,3 +46,4 @@ exports.getBooksByGenre = (req, res) => {
     })
     .catch(err => console.log(err.message));
 }
+

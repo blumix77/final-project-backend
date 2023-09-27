@@ -10,6 +10,7 @@ const app = express();
 
 const { setCors } = require("./middlewares/cors.js");
 const booksRouter = require("./routes/books.js");
+const userRouter = require("./routes/user.js");
 
 
 /* DB */
@@ -33,6 +34,7 @@ app.use(setCors);
 /* Routes */
 
 app.use("/books", booksRouter);
+app.use("/user", userRouter);
 
 /* Error Handling */
 
