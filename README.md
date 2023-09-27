@@ -1,6 +1,6 @@
 # final-project-backend
 
-## database for a libary 
+## database for a library 
 
 ### the idea:
 
