@@ -18,6 +18,19 @@ exports.getUsers = async (req, res) => {
     }
 }
 
+exports.getUser = (req, res) => {
+    const { id } = req.params;
+    User
+    .findById(id)
+    .then(user => {
+        res.status(200).json({
+            success: true,
+            id,
+            data: user,
+        })
+    })
+    .catch(err => console.log(err.message));
+} 
 
 exports.borrowBook = async (req, res) => {
     
@@ -95,6 +108,49 @@ exports.getBorrowedBooks = async (req, res) => {
         res.status(500).json({
             success: false,
             message: "Error retrieving borrowed books!"
+        });
+    }
+};
+
+exports.returnBook = async (req, res) => {
+    const { userID, bookID } = req.params;
+
+    try {
+
+        const user = await User.findById(userID);
+        const book = await Book.findById(bookID);
+
+        if(!user || !book) {
+            return res.status(404).json({
+                success: false,
+                message: "User or Book not found!"
+            });
+        }
+
+        if(!user.books.includes(bookID)) {
+            return res.status(400).json({
+                success: false,
+                message: "The book wasn´t borrowed by the user!"
+            })
+        }
+
+        // Entfernen des Buches aus der List der ausgeliehenen Bücher des Benutzers
+        user.books = user.books.filter((borrowedBookID) => !borrowedBookID.equals(bookID));
+
+        book.isAvailable = true
+
+        await user.save();
+        await book.save();
+
+        res.status(200).json({
+            success: true,
+            message: "The book was successfully returned!"
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            success: false,
+            message: "Error returning the book!"
         });
     }
 };
