@@ -4,6 +4,51 @@ require('dotenv').config();
 const Book = require("../models/Book.js");
 const User = require("../models/User.js");
 
+////
+const jwt = require('jsonwebtoken');
+
+const secret = process.env.TOKEN_SECRET;
+
+
+
+////
+
+exports.loginUser = async (req, res, next) => {
+
+    try {
+        const { email, password } = req.body;
+        const user = await User.findOne({email});
+
+        if(user) {
+            if(user.comparePassword(password)) {
+                const token = jwt.sign({ user, id: user._id }, secret)
+
+                res
+                .cookie('access_token', token , {
+                    maxAge: 24 * 60 * 60 * 1000,
+                    httpOnly: true
+                })
+                .status(200)
+                .json({
+                    success: true,
+                    message: `User ${email} is logged in!`
+                })}
+        } else {
+            res.status(403).json({
+                success: false,
+                message: "User not found!"
+            })
+        }
+    } catch (error) {
+        next(error);
+    }
+}
+
+
+
+////
+
+
 exports.getUsers = async (req, res) => {
     try {
         const users = await User.find();

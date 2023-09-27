@@ -11,12 +11,12 @@ const mongoose = require("mongoose");
   .then(() => console.log("connected to DB"))
   .catch((err) => console.log("ERROR:", err.message)); */
 
-const { connect, closeConnection } = require("../config/db.js");
+const { connect, closeConnection } = require("./config/db.js");
 
 /* MODELS TO SEED */
 
-const Book  = require("../models/Book.js");
-const User  = require("../models/User.js");
+const Book  = require("./models/Book.js");
+const User  = require("./models/User.js");
 
 const chance = new Chance();
 
@@ -39,7 +39,7 @@ const generateBooks = (num) => {
             genre,
             year,
             ISBN,
-            bookID,
+            // bookID,
             isAvailable
         });
     }
@@ -54,12 +54,14 @@ const generateUsers = (num) => {
         const firstname = chance.first();
         const lastname = chance.last();
         const email = chance.email();
+        const password = chance.string({ length: 8 });
 
         users.push({
-            userID,
+            // userID,
             firstname,
             lastname,
-            email
+            email,
+            password
         });
     }
     return users;

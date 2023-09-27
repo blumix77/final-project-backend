@@ -3,8 +3,39 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 
+////
+
+const crypto = require("crypto");
+const jwt = require('jsonwebtoken');
+
+/* const secret = crypto.randomBytes(64).toString('hex');
+console.log(secret); */
+
+const secret = process.env.TOKEN_SECRET;
+
+exports.signAccessToken = data => {
+    return jwt.sign(data, process.env.TOKEN_SECRET, {expiresIn: '1800s'});
+};
+
+exports.verifyToken = (req, res, next) => {
+    try {
+        const authHeader = req.headers['authorization'];
+        const token = authHeader && authHeader.split(' ')[1];
+
+        const decodedData = jwt.verify(token, process.env.TOKEN_SECRET);
+        next();
+    } catch (error) {
+        res.status(401).json({ message: "NOT AUTHORIZED!"});
+    }
+};
+
+
+////
+
 const port = process.env.PORT || 4000;
 const app = express();
+
+
 
 /* Imports */
 
@@ -30,6 +61,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true}));
 
 app.use(setCors);
+
+
 
 /* Routes */
 
