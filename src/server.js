@@ -7,6 +7,7 @@ const mongoose = require("mongoose");
 
 const crypto = require("crypto");
 const jwt = require('jsonwebtoken');
+const cookieParser = require('cookie-parser');
 
 /* const secret = crypto.randomBytes(64).toString('hex');
 console.log(secret); */
@@ -59,13 +60,13 @@ const db = mongoose
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true}));
-
 app.use(setCors);
+app.use(cookieParser());
 
 
 
 /* Routes */
-
+/* app.use("/login", userRouter); */
 app.use("/books", booksRouter);
 app.use("/user", userRouter);
 

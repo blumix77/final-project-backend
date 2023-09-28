@@ -6,7 +6,7 @@ const User = require("../models/User.js");
 
 ////
 const jwt = require('jsonwebtoken');
-
+const cookieParser = require('cookie-parser');
 const secret = process.env.TOKEN_SECRET;
 
 
@@ -20,7 +20,7 @@ exports.loginUser = async (req, res, next) => {
         const user = await User.findOne({email});
 
         if(user) {
-            if(user.comparePassword(password)) {
+            if(user.password === password) {
                 const token = jwt.sign({ user, id: user._id }, secret)
 
                 res
@@ -79,12 +79,12 @@ exports.getUser = (req, res) => {
 
 exports.borrowBook = async (req, res) => {
     
-    const { userID, bookID } = req.params;
-    console.log(userID, bookID);
+    const { /* userID, */ bookID } = req.params;
+    //console.log(userID, bookID);
 
     try {
         // Suchen des Benutzers und des Buches in der DB
-        const user = await User.findById(userID);
+        const user = await User.findById(req.loggedInId); //userID
         const book = await Book.findById(bookID);
         /* console.log("user", userID);
         console.log("book", bookID); */

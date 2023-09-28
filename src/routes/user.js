@@ -15,8 +15,9 @@ router.route("/:id")
     .get(userController.getUser)
     //.get(authUser.authorize, userController.getUser)
 
-router.route("/:userID/borrow/:bookID")
-    .put(userController.borrowBook)
+router.route("/borrow/:bookID") // /:userID/borrow/:bookID
+    .put(authUser.authorize, userController.borrowBook)
+    //.put(userController.borrowBook)
 
 router.route("/:userID/borrowed")
     .get(userController.getBorrowedBooks)

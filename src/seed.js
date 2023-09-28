@@ -55,13 +55,15 @@ const generateUsers = (num) => {
         const lastname = chance.last();
         const email = chance.email();
         const password = chance.string({ length: 8 });
+       // const hash = User.hashPassword(password);
 
         users.push({
             // userID,
             firstname,
             lastname,
             email,
-            password
+            password,
+          //  hash
         });
     }
     return users;
