@@ -22,8 +22,9 @@ router.route("/borrow/:bookID") // /:userID/borrow/:bookID
 router.route("/:userID/borrowed")
     .get(userController.getBorrowedBooks)
 
-router.route("/:userID/return/:bookID")
-    .put(userController.returnBook)
+router.route("/return/:bookID") // /:userID/return/:bookID
+    .put(authUser.authorize, userController.returnBook)
+    // .put(userController.returnBook)
 
 
 module.exports = router;

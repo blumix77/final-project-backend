@@ -162,7 +162,7 @@ exports.returnBook = async (req, res) => {
 
     try {
 
-        const user = await User.findById(userID);
+        const user = await User.findById(req.loggedInId); //userID
         const book = await Book.findById(bookID);
 
         if(!user || !book) {
